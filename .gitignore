@@ -1,6 +1,6 @@
 ### Custom .gitignore template
 # Folders
-!previous/
+\!previous/
 .idea/
 .vscode/
 node_modules/
