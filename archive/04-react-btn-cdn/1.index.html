@@ -1,0 +1,51 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0"
+        name="viewport">
+  <meta content="ie=edge" http-equiv="X-UA-Compatible">
+  <title>Document</title>
+  <style>
+    .btn-info {
+      background-color: blue;
+    }
+  </style>
+</head>
+<body>
+
+  <div id="root"></div>
+
+  <script crossorigin src="https://unpkg.com/react@18/umd/react.development.js"></script>
+  <script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.development.js"></script>
+  <script crossorigin src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+
+  <script type="text/babel">
+    const App = () => {
+      // const buttonText = 'Click me please'
+      // const setButtonText = function() {/* mutate buttonText */}
+      const [buttonText, setButtonText] = React.useState('Click me please')
+
+      const onClickHandler = () => {
+        // buttonText = 'React clicked'
+        setButtonText(`React clicked! {${new Date().toLocaleTimeString()}}`)
+        console.log(buttonText)
+      }
+
+      console.log('App function is called')
+      return (
+        <div>
+          <h1>Hello from React</h1>
+          <button id="button" onClick={onClickHandler}>{buttonText}</button>
+        </div>
+      )
+    }
+
+    const container = document.getElementById('root')
+    const root = ReactDOM.createRoot(container)
+    root.render(<App />)
+
+  </script>
+
+</body>
+</html>
