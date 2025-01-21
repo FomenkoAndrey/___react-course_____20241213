@@ -1,4 +1,4 @@
-import { useForm } from 'react-hook-form'
+import { useForm, useWatch } from 'react-hook-form'
 
 type FormData = {
   login: string
@@ -6,7 +6,10 @@ type FormData = {
 }
 
 const LoginForm = () => {
-  const { register, handleSubmit, formState: { errors } } = useForm<FormData>()
+  const { register, handleSubmit, formState: { errors, isSubmitted }, control } = useForm<FormData>()
+
+  const loginValue = useWatch({ control, name: 'login' })
+  const passwordValue = useWatch({ control, name: 'password' })
 
   const onSubmit = (data: FormData) => {
     console.log(data)
@@ -28,6 +31,9 @@ const LoginForm = () => {
           name="login"
         />
         {errors.login && <div className="error">{errors.login.message}</div>}
+        {!errors.login && isSubmitted && loginValue && loginValue.length >= 3 && (
+          <div className="success">Login is valid!</div>
+        )}
       </div>
 
       <div className="form-group">
@@ -44,6 +50,9 @@ const LoginForm = () => {
           name="password"
         />
         {errors.password && <div className="error">{errors.password.message}</div>}
+        {!errors.password && isSubmitted && passwordValue && passwordValue.length >= 5 && (
+          <div className="success">Password is valid!</div>
+        )}
       </div>
 
       <button type="submit">Submit</button>
