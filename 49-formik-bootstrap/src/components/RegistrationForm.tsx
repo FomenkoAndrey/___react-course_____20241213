@@ -5,6 +5,11 @@ import { handleSubmit } from '../helpers/handleSubmit.ts'
 import { initialValues } from '../config/initialValues.ts'
 import InputField from './InputField.tsx'
 
+
+// TODO:
+// зробили декомпозицію
+// ! продовжуємо із валідацією полів OnChange замість дефолтного OnBlur
+
 const RegistrationForm = () => {
   return (
     <Formik
@@ -34,7 +39,6 @@ const RegistrationForm = () => {
                       label="Підтвердження пароля"
                       touched={touched}
                       errors={errors} />
-
 
           <InputField name="email"
                       type="email"
