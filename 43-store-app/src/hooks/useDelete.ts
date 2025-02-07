@@ -1,17 +1,15 @@
 import axios from 'axios'
-import { useState } from 'react'
 
 export const useDelete = (url: string) => {
-  const [error, setError] = useState<string | null>(null)
-
   const del = async (id: string) => {
     try {
       const response = await axios.delete(`${url}/${id}`)
       return response.data
     } catch (error) {
-      setError(`Error deleting product:', ${(error as Error).message}`)
+      console.error(`Error deleting the product:', ${(error as Error).message}`)
+      throw new Error('Failed to delete the product')
     }
   }
 
-  return { delete: del, error }
+  return {delete: del}
 }

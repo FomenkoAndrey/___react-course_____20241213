@@ -6,30 +6,34 @@ export const useFetch = <T>(url: string, limit?: number, reload?: string) => {
   const [error, setError] = useState<string | null>(null)
   const [isLoading, setIsLoading] = useState<boolean>(false)
 
-  // TODO: Винести видалення продукту в окремий код....
-
   useEffect(() => {
     const fetchUsers = async () => {
       setIsLoading(true)
 
-
       try {
-        await new Promise(resolve => setTimeout(resolve, 200))
-        const response = await axios.get<T[]>(limit ? `${url}?_limit=${limit}` : url)
+        const cancelTokenSource = axios.CancelToken.source()
+        const response = await axios.get<T[]>(limit ? `${url}?_limit=${limit}` : url, {
+          cancelToken: cancelTokenSource.token
+        })
 
         if (response.status !== 200) {
-          throw new Error(`Error: Request failed with status code ${response.status}`)
+          setError(`Error: Request failed with status code ${response.status}`)
+          return
         }
 
-        setData(response.data as T[])
+        setData(response.data)
       } catch (error) {
-        setError(`Error fetching data: ${(error as Error).message}`)
+        if (axios.isCancel(error)) {
+          console.log('Request canceled:', error.message)
+        } else {
+          setError(`Error fetching data: ${(error as Error).message}`)
+        }
       } finally {
         setIsLoading(false)
       }
     }
-    fetchUsers().catch((error) => console.log('Error fetching data:', error.message))
+    fetchUsers()
   }, [url, limit, reload])
 
-  return { data, error, isLoading }
+  return {data, error, isLoading}
 }

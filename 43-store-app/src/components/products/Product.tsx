@@ -3,15 +3,22 @@ import { FaTrash } from 'react-icons/fa6'
 import { FaEdit } from 'react-icons/fa'
 import { API_URL } from '../../utils/mockapi.ts'
 import { useDelete } from '../../hooks/useDelete.ts'
-import EditProductButton from '../EditProductButton.tsx'
+import EditProduct from './EditProduct.tsx'
+import { useSelector } from 'react-redux'
+import { selectIsLogged } from '../../redux/slices/authSlice.ts'
 
 interface ProductProps {
   product: ProductInterface
   reload: () => void
 }
 
-const Product = ({ product: { id, name, description, category, price, image }, reload }: ProductProps) => {
-  const { delete: deleteProduct } = useDelete(API_URL)
+const Product = ({
+  product:
+      {id, name, description, category, price, image},
+  reload
+}: ProductProps) => {
+  const isLogged = useSelector(selectIsLogged)
+  const {delete: deleteProduct} = useDelete(API_URL)
 
   const handleDeleteProduct = async () => {
     try {
@@ -23,21 +30,24 @@ const Product = ({ product: { id, name, description, category, price, image }, r
   }
 
   return (
-    <li className="product-item">
-      <h2 className="product-item__title">{name}</h2>
-      <p className="product-item__description">${description}</p>
-      <p className="product-item__category">${category}</p>
-      <p className="product-item__price">${price}</p>
-      <img className="product-item__image" src={image} alt={name} />
-      <div className="product-item__actions">
-        <button className="product-item__delete" onClick={handleDeleteProduct}>
-          <FaTrash />
-        </button>
-        <EditProductButton product={{ id, name, description, category, price, image }} reload={reload}>
-          <FaEdit />
-        </EditProductButton>
-      </div>
-    </li>
+      <li className="product-item">
+        <h2 className="product-item__title">{name}</h2>
+        <p className="product-item__description">${description}</p>
+        <p className="product-item__category">${category}</p>
+        <p className="product-item__price">${price}</p>
+        <img className="product-item__image" src={image} alt={name}/>
+
+        {isLogged && (
+            <div className="product-item__actions">
+              <button className="product-item__delete" onClick={handleDeleteProduct}>
+                <FaTrash/>
+              </button>
+              <EditProduct product={{id, name, description, category, price, image}} reload={reload}>
+                <FaEdit/>
+              </EditProduct>
+            </div>
+        )}
+      </li>
   )
 }
 
